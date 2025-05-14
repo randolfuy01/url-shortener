@@ -15,6 +15,11 @@ import (
 
 // md5 encryption algorithm
 func Encryption_MD5(url string) (string, bool) {
+
+	// String is empty
+	if len(url) == 0 {
+		return url, false
+	}
 	// Initialize the new hash
 	hash := md5.New()
 	_, err := io.WriteString(hash, url)

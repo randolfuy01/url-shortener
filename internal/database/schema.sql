@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS "users" (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "urls" (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL
+    original_url TEXT NOT NULL, 
+    short_url TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

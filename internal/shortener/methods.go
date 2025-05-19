@@ -55,7 +55,7 @@ func Encryption_SHA256(url string) (string, bool) {
 // vigenere cipher algorithm
 func Encryption_Vigenere_Cipher(url string) (string, bool) {
 	// Import key
-	err := godotenv.Load("config/.env")
+	err := godotenv.Load(".env")
 
 	// Failed loading environment
 	if err != nil {

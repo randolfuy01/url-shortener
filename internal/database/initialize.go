@@ -26,3 +26,12 @@ func Init_DB() {
 	}
 	Pool = pool
 }
+
+// Wrapper function for executing queries
+func Execute_Query[T any](item T, operation func(T, *pgxpool.Pool) (bool, error)) (bool, error) {
+	result, err := operation(item, Pool)
+	if err != nil {
+		return false, err
+	}
+	return result, nil
+}

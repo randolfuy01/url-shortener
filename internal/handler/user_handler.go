@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/randolfuy01/url-shortener/internal/database"
+	"github.com/randolfuy01/url-shortener/internal/shortener"
 )
 
 // Create User Handler
@@ -34,6 +35,15 @@ func Create_Handle(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "No password provided")
 		return
 	}
+
+	// Hash password
+	hashed, err := shortener.Encode(user.Password, shortener.Encryption_SHA256)
+	if err != nil {
+		w.WriteHeader(http.StatusExpectationFailed)
+		fmt.Fprint(w, "Error hashing password")
+		return
+	}
+	user.Password = hashed
 
 	res, err := database.Execute_Query(user, database.Insert_User)
 

@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 CREATE TABLE IF NOT EXISTS "urls" (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL
-    original_url TEXT NOT NULL, 
-    short_url TEXT NOT NULL,
+    original_url TEXT UNIQUE NOT NULL, 
+    short_url TEXT UNIQUE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

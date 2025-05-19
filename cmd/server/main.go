@@ -9,8 +9,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/hello-word", handler.HelloHandler)
-
+	http.HandleFunc("/create-user", handler.Create_User_Handler)
 	fmt.Println("Server is running at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

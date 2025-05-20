@@ -11,7 +11,7 @@ import (
 // Create User Handler
 func Create_User_Handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		Create_Handle(w, r)
+		Handle_Create_User(w, r)
 	} else {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		fmt.Fprint(w, "Invalid method")
@@ -19,7 +19,7 @@ func Create_User_Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 // TO DO: Refactor
-func Create_Handle(w http.ResponseWriter, r *http.Request) {
+func Handle_Create_User(w http.ResponseWriter, r *http.Request) {
 	user := database.User{
 		Name:     r.URL.Query().Get("name"),
 		Password: r.URL.Query().Get("password"),

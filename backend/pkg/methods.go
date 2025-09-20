@@ -1,4 +1,4 @@
-package shortener
+package pkg
 
 import (
 	"crypto/md5"
@@ -15,7 +15,6 @@ import (
 
 // md5 encryption algorithm
 func Encryption_MD5(url string) (string, bool) {
-
 	// String is empty
 	if len(url) == 0 {
 		return url, false
@@ -23,7 +22,6 @@ func Encryption_MD5(url string) (string, bool) {
 	// Initialize the new hash
 	hash := md5.New()
 	_, err := io.WriteString(hash, url)
-
 	// Hashing went wrong
 	if err != nil {
 		return url, false
@@ -40,7 +38,6 @@ func Encryption_SHA256(url string) (string, bool) {
 	// Initialize the new hash
 	hash := sha256.New()
 	_, err := io.WriteString(hash, url)
-
 	// Hashing went wrong
 	if err != nil {
 		return url, false
@@ -56,7 +53,6 @@ func Encryption_SHA256(url string) (string, bool) {
 func Encryption_Vigenere_Cipher(url string) (string, bool) {
 	// Import key
 	err := godotenv.Load(".env")
-
 	// Failed loading environment
 	if err != nil {
 		log.Fatal("unable to load environment")

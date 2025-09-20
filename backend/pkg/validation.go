@@ -7,7 +7,6 @@ import (
 
 // regex validation for formatting
 func Format_validation(val string, expression string) (bool, error) {
-
 	// input validation
 	if len(val) == 0 {
 		return false, errors.New("no string provided")

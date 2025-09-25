@@ -57,9 +57,3 @@ func hashData(data string) [32]byte {
 	sum := sha256.Sum256([]byte(data))
 	return sum
 }
-
-func ensureDB() {
-	if pool == nil {
-		initConnection()
-	}
-}

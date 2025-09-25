@@ -4,6 +4,13 @@
 
 package migrations
 
+type Url struct {
+	ID         int64
+	UserID     int64
+	OrginalUrl string
+	ShortUrl   string
+}
+
 type User struct {
 	ID       int64
 	Name     string

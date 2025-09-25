@@ -9,6 +9,30 @@ import (
 	"context"
 )
 
+const createUrl = `-- name: CreateUrl :one
+INSERT INTO urls (user_id, orginal_url, short_url)
+VALUES ($1, $2, $3)
+RETURNING id, user_id, orginal_url, short_url
+`
+
+type CreateUrlParams struct {
+	UserID     int64
+	OrginalUrl string
+	ShortUrl   string
+}
+
+func (q *Queries) CreateUrl(ctx context.Context, arg CreateUrlParams) (Url, error) {
+	row := q.db.QueryRow(ctx, createUrl, arg.UserID, arg.OrginalUrl, arg.ShortUrl)
+	var i Url
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.OrginalUrl,
+		&i.ShortUrl,
+	)
+	return i, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (name, password)
 VALUES ($1, $2)
@@ -28,13 +52,55 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const getUser = `-- name: GetUser :one
-SELECT name FROM users
+SELECT id, name, password FROM users
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUser(ctx context.Context, id int64) (string, error) {
+func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	row := q.db.QueryRow(ctx, getUser, id)
-	var name string
-	err := row.Scan(&name)
-	return name, err
+	var i User
+	err := row.Scan(&i.ID, &i.Name, &i.Password)
+	return i, err
+}
+
+const getUserByName = `-- name: GetUserByName :one
+SELECT id, name, password FROM users
+WHERE name = $1 LIMIT 1
+`
+
+func (q *Queries) GetUserByName(ctx context.Context, name string) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByName, name)
+	var i User
+	err := row.Scan(&i.ID, &i.Name, &i.Password)
+	return i, err
+}
+
+const getUserURLs = `-- name: GetUserURLs :many
+SELECT id, user_id, orginal_url, short_url FROM urls
+WHERE user_id = $1
+`
+
+func (q *Queries) GetUserURLs(ctx context.Context, userID int64) ([]Url, error) {
+	rows, err := q.db.Query(ctx, getUserURLs, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Url
+	for rows.Next() {
+		var i Url
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.OrginalUrl,
+			&i.ShortUrl,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
